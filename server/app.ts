@@ -4,13 +4,13 @@ import express, { Router } from "express";
 import expressGraphQL from "express-graphql";
 import session from "express-session";
 import mongoose from "mongoose";
+import { AddressInfo } from "net";
 import passport from "passport";
 import webpack from "webpack";
 import webpackMiddleware from "webpack-dev-middleware";
 import { webpackConfig } from "../webpack.config";
 import { User } from "./models/user";
 import schema from "./schema/schema";
-import {AddressInfo} from "net";
 
 export interface IController {
   // path: string;
@@ -21,24 +21,23 @@ export class App {
   public app: express.Application;
   private MONGO_URI = "mongodb://james:password1@ds161517.mlab.com:61517/auth"; // todo: move to env file and change password
 
-  constructor(controllers: any[]) {
+  constructor() {
     this.app = express();
 
+    this.app.set("port", 4000);
     this.setupPassport();
     this.connectToTheDatabase();
     this.initializeLogins();
     this.setupMiddleware();
   }
 
-    public listen() {
-        const server = this.app.listen(this.app.get("port"), () => {
-            console.log(
-                `Express running → PORT ${
-                    (server.address() as AddressInfo).port
-                }`
-            );
-        });
-    }
+  public listen() {
+    const server = this.app.listen(this.app.get("port"), () => {
+      console.log(
+        `Express running → PORT ${(server.address() as AddressInfo).port}`
+      );
+    });
+  }
 
   private initializeLogins() {
     const MongoStore = mongo(session);

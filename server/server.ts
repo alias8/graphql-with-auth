@@ -1,6 +1,5 @@
 import { App } from "./app";
-import { AuthenticationController } from "./services/authController";
 
-const app = new App([new AuthenticationController()]);
+const app = new App();
 
 app.listen();

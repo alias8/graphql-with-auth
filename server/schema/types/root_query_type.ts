@@ -6,5 +6,10 @@ import {
 } from "graphql";
 
 export const RootQuery = new GraphQLObjectType({
-  name: "RootQueryType"
+  name: "RootQueryType",
+  fields: {
+    dummyField: {
+      type: GraphQLID
+    }
+  }
 });

@@ -6,6 +6,8 @@ import mongoose, {
   PassportLocalSchema,
   Schema
 } from "mongoose";
+import mongodbErrorHandler from "mongoose-mongodb-errors";
+import passportLocalMongoose from "passport-local-mongoose";
 
 export interface IUserModel extends PassportLocalDocument {
   email: string;
@@ -24,6 +26,9 @@ const UserSchema = new Schema<IUserModel>({
   }
 });
 
+UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });
+UserSchema.plugin(mongodbErrorHandler as any);
+
 // The user's password is never saved in plain text.  Prior to saving the
 // user model, we 'salt' and 'hash' the users password.  This is a one way
 // procedure that modifies the password - the plain text password cannot be
@@ -38,7 +43,7 @@ UserSchema.pre("save", function save(next) {
     if (saltErr) {
       return next(saltErr);
     }
-    bcrypt.hash(user.password, salt, null, (hashErr, hash) => {
+    bcrypt.hash(user.password, salt,(hashErr, hash) => {
       if (hashErr) {
         return next(hashErr);
       }
