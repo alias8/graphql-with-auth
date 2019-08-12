@@ -4,13 +4,15 @@ import { User } from "../models/user";
 export class AuthenticationService {
   public static login = ({ email, password, req }) => {
     return new Promise((resolve, reject) => {
-      passport.authenticate("local", (err, user) => {
+      passport.authenticate("local", (err, user, info) => {
+          console.log("trying to use ", email, password);
+          console.log(user);
         if (!user) {
           reject("Invalid credentials.");
-        }
-
-        req.login(user, () => resolve(user));
-      })({ body: { email, password } });
+        } else {
+            resolve(user)
+          }
+      })({body: {email, password}});
     });
   };
 

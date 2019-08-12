@@ -13,11 +13,30 @@ export const mutations = new GraphQLObjectType({
         },
         password: { type: GraphQLString }
       },
-      // @ts-ignore
       resolve(parentValue, { email, password }, req) {
-        console.log(`trying to find ${email} ${password}`);
         return AuthenticationService.signup({ email, password, req });
       }
-    }
+    },
+    logout: {
+      type: UserType,
+      resolve(parentValue, args, req) {
+        // we could move this to AuthenticationService if we wanted
+        const {user} = req;
+        req.logout(); // http://www.passportjs.org/docs/logout/
+        return user;
+      }
+    },
+    login: {
+      type: UserType,
+      args: {
+        email: {
+          type: GraphQLString
+        },
+        password: { type: GraphQLString }
+      },
+      resolve(parentValue, { email, password }, req) {
+        return AuthenticationService.login({ email, password, req });
+      }
+    },
   }
 });
