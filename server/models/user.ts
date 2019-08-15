@@ -7,7 +7,6 @@ import mongoose, {
   Schema
 } from "mongoose";
 import mongodbErrorHandler from "mongoose-mongodb-errors";
-import passportLocalMongoose from "passport-local-mongoose";
 
 export interface IUserModel extends PassportLocalDocument {
   email: string;
@@ -26,7 +25,6 @@ const UserSchema = new Schema<IUserModel>({
   }
 });
 
-UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });
 UserSchema.plugin(mongodbErrorHandler as any);
 
 // The user's password is never saved in plain text.  Prior to saving the
@@ -43,7 +41,7 @@ UserSchema.pre("save", function save(next) {
     if (saltErr) {
       return next(saltErr);
     }
-    bcrypt.hash(user.password, salt,(hashErr, hash) => {
+    bcrypt.hash(user.password, salt, (hashErr, hash) => {
       if (hashErr) {
         return next(hashErr);
       }
@@ -67,7 +65,4 @@ UserSchema.methods.comparePassword = function comparePassword(
   });
 };
 
-export const User: PassportLocalModel<IUserModel> = model<IUserModel>(
-  "user",
-  UserSchema as PassportLocalSchema
-);
+export const User = model<IUserModel>("user", UserSchema);

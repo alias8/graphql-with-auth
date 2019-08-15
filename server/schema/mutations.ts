@@ -20,10 +20,7 @@ export const mutations = new GraphQLObjectType({
     logout: {
       type: UserType,
       resolve(parentValue, args, req) {
-        // we could move this to AuthenticationService if we wanted
-        const {user} = req;
-        req.logout(); // http://www.passportjs.org/docs/logout/
-        return user;
+        return AuthenticationService.logout({ req });
       }
     },
     login: {
@@ -34,9 +31,9 @@ export const mutations = new GraphQLObjectType({
         },
         password: { type: GraphQLString }
       },
-      resolve(parentValue, { email, password }, req) {
-        return AuthenticationService.login({ email, password, req });
+      resolve(parentValue, { email, password }) {
+        return AuthenticationService.login({ email, password });
       }
-    },
+    }
   }
 });

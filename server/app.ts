@@ -6,10 +6,11 @@ import session from "express-session";
 import mongoose from "mongoose";
 import { AddressInfo } from "net";
 import passport from "passport";
+import { Strategy } from "passport-local";
 import webpack from "webpack";
 import webpackMiddleware from "webpack-dev-middleware";
 import { webpackConfig } from "../webpack.config";
-import { User } from "./models/user";
+import { IUserModel, User } from "./models/user";
 import schema from "./schema/schema";
 
 export interface IController {
@@ -81,7 +82,7 @@ export class App {
   private setupMiddleware() {
     // Passport is wired into express as a middleware. When a request comes in,
     // Passport will examine the request's session (as set by the above config) and
-    // assign the current user to the 'req.user' object.  See also servces/auth.ts
+    // assign the current user to the 'req.user' object.  See also services/auth.ts
     this.app.use(passport.initialize());
     this.app.use(passport.session());
 
@@ -106,8 +107,47 @@ export class App {
   }
 
   private setupPassport() {
-    passport.use(User.createStrategy());
-    passport.serializeUser(User.serializeUser());
-    passport.deserializeUser(User.deserializeUser());
+    // todo: perhaps refactor to use passport-local-mongoose
+    // Instructs Passport how to authenticate a user using a locally saved email
+    // and password combination.  This strategy is called whenever a user attempts to
+    // log in.  We first find the user model in MongoDB that matches the submitted email,
+    // then check to see if the provided password matches the saved password. There
+    // are two obvious failure points here: the email might not exist in our DB or
+    // the password might not match the saved one.  In either case, we call the 'done'
+    // callback, including a string that messages why the authentication process failed.
+    // This string is provided back to the GraphQL client.
+    passport.use(
+      new Strategy({ usernameField: "email" }, (email, password, done) => {
+        User.findOne({ email: email.toLowerCase() }, (err, user) => {
+          if (err) {
+            return done(err);
+          }
+          if (!user) {
+            return done(null, false, { message: "Invalid Credentials" });
+          }
+          user.comparePassword(password, (passwordErr, isMatch) => {
+            if (passwordErr) {
+              return done(passwordErr);
+            }
+            if (isMatch) {
+              return done(null, user);
+            }
+            return done(null, false, { message: "Invalid Credentials" });
+          });
+        });
+      })
+    );
+    // SerializeUser is used to provide some identifying token that can be saved
+    // in the users session.  We traditionally use the 'ID' for this.
+    passport.serializeUser<IUserModel, string>((user, done) => {
+      done(null, user.id);
+    });
+    // The counterpart of 'serializeUser'.  Given only a user's ID, we must return
+    // the user object.  This object is placed on 'req.user'.
+    passport.deserializeUser((id, done) => {
+      User.findById(id, (err, user) => {
+        done(err, user);
+      });
+    });
   }
 }

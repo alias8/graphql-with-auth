@@ -4,12 +4,16 @@ import {
   GraphQLNonNull,
   GraphQLObjectType
 } from "graphql";
+import { UserType } from "./user_type";
 
 export const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    dummyField: {
-      type: GraphQLID
+    user: {
+      type: UserType,
+      resolve(parentValue, args, req) {
+        return req.user;
+      }
     }
   }
 });
