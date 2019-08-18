@@ -27,16 +27,6 @@ class Root extends React.Component {
     return (
       <ApolloProvider client={client}>
         <Router>
-          <nav>
-            <ul>
-              <li>
-                <NavLink to="/">Home</NavLink>
-              </li>
-              <li>
-                <NavLink to="/songs/new">Create Song</NavLink>
-              </li>
-            </ul>
-          </nav>
           <App>
             <Switch>
               <Route exact={true} path={"/"} component={Home} />
