@@ -26,7 +26,7 @@ class Header extends React.Component<IProps> {
   private onLogoutClick = () => {
     this.props.mutate!({}).then(() => {
       /*
-       * We can use refetch() here because we want to call the getSongs
+       * We can use refetch() here because we want to call the getUser
        * query again, and this component knows what that is.
        * */
       return this.props.data!.refetch();

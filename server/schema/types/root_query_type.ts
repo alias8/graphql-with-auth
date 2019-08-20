@@ -12,7 +12,7 @@ export const RootQuery = new GraphQLObjectType({
     user: {
       type: UserType,
       resolve(parentValue, args, req) {
-        return req.user;// remember, user is added to req object by passport
+        return req.user; // remember, user is added to req object by passport
       }
     }
   }

@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import App from "./components/App";
 import Home from "./components/Home";
-import Login from "./components/Login";
+import LoginForm from "./components/LoginForm";
 import NoMatch from "./components/NoMatch";
 
 const client = new ApolloClient({
@@ -41,7 +41,7 @@ class Root extends React.Component {
           <App>
             <Switch>
               <Route exact={true} path={"/"} component={Home} />
-              <Route exact={true} path={"/login"} component={Login} />
+              <Route exact={true} path={"/login"} component={LoginForm} />
               <Route component={NoMatch} />
             </Switch>
           </App>
