@@ -20,7 +20,6 @@ export const mutations = new GraphQLObjectType({
     logout: {
       type: UserType,
       resolve(parentValue, args, req) {
-        // console.log("james 2", req.user);
         return AuthenticationService.logout(req);
       }
     },

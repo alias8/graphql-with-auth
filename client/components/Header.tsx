@@ -34,7 +34,6 @@ class Header extends React.Component<IProps> {
   };
 
   private renderButtons = () => {
-    // todo: fix user not beingn found, something to do with cookies
     const user = this.props.data && this.props.data.user;
     const loading = this.props.data && this.props.data.loading;
     if (loading) {

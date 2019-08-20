@@ -17,15 +17,17 @@ import NoMatch from "./components/NoMatch";
 
 const client = new ApolloClient({
   /*
-   * we need this so that cookies are sent with each graphql request,
+   * Some guides say we need this so that cookies are sent with each graphql request,
    * otherwise we will not be able to check  login status.
-   * // todo: why is this not working??
    * */
-  // link: new HttpLink(),
-  link: createHttpLink({
-    uri: "/graphql",
-    credentials: "same-origin"
-  }),
+  // link: createHttpLink({
+  //   uri: "/graphql",
+  //   credentials: "same-origin"
+  // }),
+
+  // However, the cookies seem to be sent anyway without the above?
+  link: new HttpLink(),
+
   cache: new InMemoryCache({
     dataIdFromObject: o => o.id
   })
