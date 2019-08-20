@@ -5,18 +5,19 @@ import { User } from "../models/user";
 export class AuthenticationService {
   public static login = ({
     email,
-    password
+    password,
+    req
   }: {
     email: string;
     password: string;
+    req: express.Request;
   }) => {
     return new Promise((resolve, reject) => {
-      passport.authenticate("local", (err, user, info) => {
+      passport.authenticate("local", (err, user) => {
         if (!user) {
           reject("Invalid credentials.");
-        } else {
-          resolve(user);
         }
+        req.login(user, () => resolve(user));
       })({ body: { email, password } });
     });
   };
@@ -54,9 +55,9 @@ export class AuthenticationService {
       });
   };
 
-  public static logout = ({ req }: { req: express.Request }) => {
+  public static logout = (req: express.Request) => {
     const { user } = req;
-    console.log("james 1", req);
+    console.log("james 9", user);
     req.logout(); // http://www.passportjs.org/docs/logout/
     return user;
   };

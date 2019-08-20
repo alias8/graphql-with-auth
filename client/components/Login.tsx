@@ -10,7 +10,7 @@ class Login extends React.Component {
         </label>
         <input type="submit" value="Submit" />
       </form>
-    )
+    );
   }
 }
 

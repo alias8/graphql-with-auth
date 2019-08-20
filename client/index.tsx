@@ -12,15 +12,15 @@ import {
 } from "react-router-dom";
 import App from "./components/App";
 import Home from "./components/Home";
-import NoMatch from "./components/NoMatch";
 import Login from "./components/Login";
+import NoMatch from "./components/NoMatch";
 
 const client = new ApolloClient({
   /*
-  * we need this so that cookies are sent with each graphql request,
-  * otherwise we will not be able to check  login status.
-  * // todo: why is this not working??
-  * */
+   * we need this so that cookies are sent with each graphql request,
+   * otherwise we will not be able to check  login status.
+   * // todo: why is this not working??
+   * */
   // link: new HttpLink(),
   link: createHttpLink({
     uri: "/graphql",
@@ -28,8 +28,7 @@ const client = new ApolloClient({
   }),
   cache: new InMemoryCache({
     dataIdFromObject: o => o.id
-  }),
-
+  })
 });
 
 class Root extends React.Component {

@@ -26,10 +26,10 @@ export class App {
     this.app = express();
 
     this.app.set("port", 4000);
-    this.setupPassport();
     this.connectToTheDatabase();
     this.initializeLogins();
     this.setupMiddleware();
+    this.setupPassport();
   }
 
   public listen() {
@@ -119,6 +119,8 @@ export class App {
     passport.use(
       new Strategy({ usernameField: "email" }, (email, password, done) => {
         User.findOne({ email: email.toLowerCase() }, (err, user) => {
+          console.log("james5", err);
+          console.log("james6", user);
           if (err) {
             return done(err);
           }
@@ -126,6 +128,7 @@ export class App {
             return done(null, false, { message: "Invalid Credentials" });
           }
           user.comparePassword(password, (passwordErr, isMatch) => {
+            console.log("james7", passwordErr, isMatch);
             if (passwordErr) {
               return done(passwordErr);
             }
@@ -140,12 +143,15 @@ export class App {
     // SerializeUser is used to provide some identifying token that can be saved
     // in the users session.  We traditionally use the 'ID' for this.
     passport.serializeUser<IUserModel, string>((user, done) => {
+      console.log("james8 tryting to find", user);
       done(null, user.id);
     });
     // The counterpart of 'serializeUser'.  Given only a user's ID, we must return
     // the user object.  This object is placed on 'req.user'.
     passport.deserializeUser((id, done) => {
+      console.log("james4 tryting to find", id);
       User.findById(id, (err, user) => {
+        console.log("james3", user);
         done(err, user);
       });
     });
