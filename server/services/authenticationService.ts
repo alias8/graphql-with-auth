@@ -56,6 +56,7 @@ export class AuthenticationService {
 
   public static logout = ({ req }: { req: express.Request }) => {
     const { user } = req;
+    console.log("james 1", req);
     req.logout(); // http://www.passportjs.org/docs/logout/
     return user;
   };

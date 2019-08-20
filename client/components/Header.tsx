@@ -1,46 +1,64 @@
 import React from "react";
-import { GetUserProps, withGetUser } from "../../server/generated/types";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import {
+  GetUserProps,
+  LogoutProps,
+  withGetUser,
+  withLogout
+} from "../../server/generated/types";
 
-type IProps = GetUserProps;
+type IProps = GetUserProps & LogoutProps;
 
 class Header extends React.Component<IProps> {
   public render() {
-
     return (
-        <nav>
-          <div className={"nav-wrapper"}>
-            <Link to="/" className={"brand-logo left"}>
+      <nav>
+        <div className={"nav-wrapper"}>
+          <Link to="/" className={"brand-logo left"}>
             Home
-            </Link>
-            <ul className={"right"}>
-              {this.renderButtons()}
-            </ul>
-          </div>
-        </nav>
-    )
+          </Link>
+          <ul className={"right"}>{this.renderButtons()}</ul>
+        </div>
+      </nav>
+    );
   }
 
+  private onLogoutClick = () => {
+    this.props.mutate!({}).then(() => {
+      /*
+       * We can use refetch() here because we want to call the getSongs
+       * query again, and this component knows what that is.
+       * */
+      return this.props.data!.refetch();
+    });
+  };
+
   private renderButtons = () => {
+    // todo: fix user not beingn found, something to do with cookies
     const user = this.props.data && this.props.data.user;
     const loading = this.props.data && this.props.data.loading;
     if (loading) {
-      return (
-          <div/>
-      );
+      return <div />;
     }
     if (user) {
       return (
-          <div>Logout</div>
+        <li>
+          <a onClick={this.onLogoutClick}>Logout</a>
+        </li>
       );
     } else {
       return (
-          <div>You're not signed in</div>
+        <div>
+          <li>
+            <Link to={"/signup"}>Signup</Link>
+          </li>
+          <li>
+            <Link to={"/login"}>Login</Link>
+          </li>
+        </div>
       );
     }
-  }
-
-
+  };
 }
 
-export default withGetUser<IProps>()(Header);
+export default withLogout<IProps>()(withGetUser<IProps>()(Header));

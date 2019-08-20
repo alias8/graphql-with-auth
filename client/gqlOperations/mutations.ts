@@ -1,9 +1,10 @@
-// import gql from "graphql-tag";
-//
-// export const addSongMutation = gql`
-//   mutation AddSong($title: String) {
-//     addSong(title: $title) {
-//       title
-//     }
-//   }
-// `;
+import gql from "graphql-tag";
+
+export const logoutMutation = gql`
+  mutation logout {
+    logout {
+      id
+      email
+    }
+  }
+`;
