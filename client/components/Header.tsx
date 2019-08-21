@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  GetUserProps,
-  LogoutProps,
-  withGetUser,
-  withLogout
+  GetUserQueryProps,
+  LogoutMutationProps,
+  withGetUserQuery,
+  withLogoutMutation
 } from "../../server/generated/types";
 
-type IProps = GetUserProps & LogoutProps;
+type IProps = GetUserQueryProps & LogoutMutationProps;
 
 class Header extends React.Component<IProps> {
   public render() {
@@ -60,4 +60,4 @@ class Header extends React.Component<IProps> {
   };
 }
 
-export default withLogout<IProps>()(withGetUser<IProps>()(Header));
+export default withLogoutMutation()(withGetUserQuery()(Header));

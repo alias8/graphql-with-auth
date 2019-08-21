@@ -41,103 +41,169 @@ export type UserType = {
   id?: Maybe<Scalars["ID"]>;
   email?: Maybe<Scalars["String"]>;
 };
-export type LogoutMutationVariables = {};
+export type LogoutMutationMutationVariables = {};
 
-export type LogoutMutation = { __typename?: "Mutation" } & {
+export type LogoutMutationMutation = { __typename?: "Mutation" } & {
   logout: Maybe<{ __typename?: "UserType" } & Pick<UserType, "id" | "email">>;
 };
 
-export type GetUserQueryVariables = {};
+export type LoginMutationMutationVariables = {
+  email?: Maybe<Scalars["String"]>;
+  password?: Maybe<Scalars["String"]>;
+};
 
-export type GetUserQuery = { __typename?: "RootQueryType" } & {
+export type LoginMutationMutation = { __typename?: "Mutation" } & {
+  login: Maybe<{ __typename?: "UserType" } & Pick<UserType, "email" | "id">>;
+};
+
+export type GetUserQueryQueryVariables = {};
+
+export type GetUserQueryQuery = { __typename?: "RootQueryType" } & {
   user: Maybe<{ __typename?: "UserType" } & Pick<UserType, "id" | "email">>;
 };
 
-export const LogoutDocument = gql`
-  mutation logout {
+export const LogoutMutationDocument = gql`
+  mutation logoutMutation {
     logout {
       id
       email
     }
   }
 `;
-export type LogoutMutationFn = ReactApollo.MutationFn<
-  LogoutMutation,
-  LogoutMutationVariables
+export type LogoutMutationMutationFn = ReactApollo.MutationFn<
+  LogoutMutationMutation,
+  LogoutMutationMutationVariables
 >;
-export type LogoutComponentProps = Omit<
-  ReactApollo.MutationProps<LogoutMutation, LogoutMutationVariables>,
+export type LogoutMutationComponentProps = Omit<
+  ReactApollo.MutationProps<
+    LogoutMutationMutation,
+    LogoutMutationMutationVariables
+  >,
   "mutation"
 >;
 
-export const LogoutComponent = (props: LogoutComponentProps) => (
-  <ReactApollo.Mutation<LogoutMutation, LogoutMutationVariables>
-    mutation={LogoutDocument}
+export const LogoutMutationComponent = (
+  props: LogoutMutationComponentProps
+) => (
+  <ReactApollo.Mutation<LogoutMutationMutation, LogoutMutationMutationVariables>
+    mutation={LogoutMutationDocument}
     {...props}
   />
 );
 
-export type LogoutProps<TChildProps = {}> = Partial<
-  ReactApollo.MutateProps<LogoutMutation, LogoutMutationVariables>
+export type LogoutMutationProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    LogoutMutationMutation,
+    LogoutMutationMutationVariables
+  >
 > &
   TChildProps;
-export function withLogout<TProps, TChildProps = {}>(
+export function withLogoutMutation<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
-    LogoutMutation,
-    LogoutMutationVariables,
-    LogoutProps<TChildProps>
+    LogoutMutationMutation,
+    LogoutMutationMutationVariables,
+    LogoutMutationProps<TChildProps>
   >
 ) {
   return ReactApollo.withMutation<
     TProps,
-    LogoutMutation,
-    LogoutMutationVariables,
-    LogoutProps<TChildProps>
-  >(LogoutDocument, {
-    alias: "withLogout",
+    LogoutMutationMutation,
+    LogoutMutationMutationVariables,
+    LogoutMutationProps<TChildProps>
+  >(LogoutMutationDocument, {
+    alias: "withLogoutMutation",
     ...operationOptions
   });
 }
-export const GetUserDocument = gql`
-  query getUser {
+export const LoginMutationDocument = gql`
+  mutation loginMutation($email: String, $password: String) {
+    login(email: $email, password: $password) {
+      email
+      id
+    }
+  }
+`;
+export type LoginMutationMutationFn = ReactApollo.MutationFn<
+  LoginMutationMutation,
+  LoginMutationMutationVariables
+>;
+export type LoginMutationComponentProps = Omit<
+  ReactApollo.MutationProps<
+    LoginMutationMutation,
+    LoginMutationMutationVariables
+  >,
+  "mutation"
+>;
+
+export const LoginMutationComponent = (props: LoginMutationComponentProps) => (
+  <ReactApollo.Mutation<LoginMutationMutation, LoginMutationMutationVariables>
+    mutation={LoginMutationDocument}
+    {...props}
+  />
+);
+
+export type LoginMutationProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<LoginMutationMutation, LoginMutationMutationVariables>
+> &
+  TChildProps;
+export function withLoginMutation<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    LoginMutationMutation,
+    LoginMutationMutationVariables,
+    LoginMutationProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    LoginMutationMutation,
+    LoginMutationMutationVariables,
+    LoginMutationProps<TChildProps>
+  >(LoginMutationDocument, {
+    alias: "withLoginMutation",
+    ...operationOptions
+  });
+}
+export const GetUserQueryDocument = gql`
+  query getUserQuery {
     user {
       id
       email
     }
   }
 `;
-export type GetUserComponentProps = Omit<
-  ReactApollo.QueryProps<GetUserQuery, GetUserQueryVariables>,
+export type GetUserQueryComponentProps = Omit<
+  ReactApollo.QueryProps<GetUserQueryQuery, GetUserQueryQueryVariables>,
   "query"
 >;
 
-export const GetUserComponent = (props: GetUserComponentProps) => (
-  <ReactApollo.Query<GetUserQuery, GetUserQueryVariables>
-    query={GetUserDocument}
+export const GetUserQueryComponent = (props: GetUserQueryComponentProps) => (
+  <ReactApollo.Query<GetUserQueryQuery, GetUserQueryQueryVariables>
+    query={GetUserQueryDocument}
     {...props}
   />
 );
 
-export type GetUserProps<TChildProps = {}> = Partial<
-  ReactApollo.DataProps<GetUserQuery, GetUserQueryVariables>
+export type GetUserQueryProps<TChildProps = {}> = Partial<
+  ReactApollo.DataProps<GetUserQueryQuery, GetUserQueryQueryVariables>
 > &
   TChildProps;
-export function withGetUser<TProps, TChildProps = {}>(
+export function withGetUserQuery<TProps, TChildProps = {}>(
   operationOptions?: ReactApollo.OperationOption<
     TProps,
-    GetUserQuery,
-    GetUserQueryVariables,
-    GetUserProps<TChildProps>
+    GetUserQueryQuery,
+    GetUserQueryQueryVariables,
+    GetUserQueryProps<TChildProps>
   >
 ) {
   return ReactApollo.withQuery<
     TProps,
-    GetUserQuery,
-    GetUserQueryVariables,
-    GetUserProps<TChildProps>
-  >(GetUserDocument, {
-    alias: "withGetUser",
+    GetUserQueryQuery,
+    GetUserQueryQueryVariables,
+    GetUserQueryProps<TChildProps>
+  >(GetUserQueryDocument, {
+    alias: "withGetUserQuery",
     ...operationOptions
   });
 }
