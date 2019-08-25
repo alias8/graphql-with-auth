@@ -56,6 +56,15 @@ export type LoginMutationMutation = { __typename?: "Mutation" } & {
   login: Maybe<{ __typename?: "UserType" } & Pick<UserType, "email" | "id">>;
 };
 
+export type SignupMutationMutationVariables = {
+  email?: Maybe<Scalars["String"]>;
+  password?: Maybe<Scalars["String"]>;
+};
+
+export type SignupMutationMutation = { __typename?: "Mutation" } & {
+  signup: Maybe<{ __typename?: "UserType" } & Pick<UserType, "email" | "id">>;
+};
+
 export type GetUserQueryQueryVariables = {};
 
 export type GetUserQueryQuery = { __typename?: "RootQueryType" } & {
@@ -162,6 +171,60 @@ export function withLoginMutation<TProps, TChildProps = {}>(
     LoginMutationProps<TChildProps>
   >(LoginMutationDocument, {
     alias: "withLoginMutation",
+    ...operationOptions
+  });
+}
+export const SignupMutationDocument = gql`
+  mutation signupMutation($email: String, $password: String) {
+    signup(email: $email, password: $password) {
+      email
+      id
+    }
+  }
+`;
+export type SignupMutationMutationFn = ReactApollo.MutationFn<
+  SignupMutationMutation,
+  SignupMutationMutationVariables
+>;
+export type SignupMutationComponentProps = Omit<
+  ReactApollo.MutationProps<
+    SignupMutationMutation,
+    SignupMutationMutationVariables
+  >,
+  "mutation"
+>;
+
+export const SignupMutationComponent = (
+  props: SignupMutationComponentProps
+) => (
+  <ReactApollo.Mutation<SignupMutationMutation, SignupMutationMutationVariables>
+    mutation={SignupMutationDocument}
+    {...props}
+  />
+);
+
+export type SignupMutationProps<TChildProps = {}> = Partial<
+  ReactApollo.MutateProps<
+    SignupMutationMutation,
+    SignupMutationMutationVariables
+  >
+> &
+  TChildProps;
+export function withSignupMutation<TProps, TChildProps = {}>(
+  operationOptions?: ReactApollo.OperationOption<
+    TProps,
+    SignupMutationMutation,
+    SignupMutationMutationVariables,
+    SignupMutationProps<TChildProps>
+  >
+) {
+  return ReactApollo.withMutation<
+    TProps,
+    SignupMutationMutation,
+    SignupMutationMutationVariables,
+    SignupMutationProps<TChildProps>
+  >(SignupMutationDocument, {
+    alias: "withSignupMutation",
     ...operationOptions
   });
 }

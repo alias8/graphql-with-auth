@@ -11,9 +11,13 @@ import {
   Switch
 } from "react-router-dom";
 import App from "./components/App";
+import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import LoginForm from "./components/LoginForm";
 import NoMatch from "./components/NoMatch";
+import requireAuth from "./components/requireAuth";
+import SignupForm from "./components/SignupForm";
+import "./styles/styles.scss";
 
 const client = new ApolloClient({
   /*
@@ -42,6 +46,12 @@ class Root extends React.Component {
             <Switch>
               <Route exact={true} path={"/"} component={Home} />
               <Route exact={true} path={"/login"} component={LoginForm} />
+              <Route exact={true} path={"/signup"} component={SignupForm} />
+              <Route
+                exact={true}
+                path={"/dashboard"}
+                component={requireAuth(Dashboard)}
+              />
               <Route component={NoMatch} />
             </Switch>
           </App>

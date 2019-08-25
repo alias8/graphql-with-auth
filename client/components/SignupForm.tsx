@@ -1,21 +1,20 @@
-import React, { FormEvent } from "react";
+import React from "react";
 import { RouteComponentProps, withRouter } from "react-router";
 import {
   GetUserQueryProps,
-  LoginMutationProps,
+  SignupMutationProps,
   withGetUserQuery,
-  withLoginMutation,
-  withLogoutMutation
+  withSignupMutation
 } from "../../server/generated/types";
 import AuthForm from "./AuthForm";
 
-type IProps = LoginMutationProps & GetUserQueryProps & RouteComponentProps;
+type IProps = SignupMutationProps & GetUserQueryProps & RouteComponentProps;
 
 interface IState {
   errors: string[];
 }
 
-class LoginForm extends React.Component<IProps, IState> {
+class SignupForm extends React.Component<IProps, IState> {
   public state = {
     errors: []
   };
@@ -25,7 +24,7 @@ class LoginForm extends React.Component<IProps, IState> {
     prevState: Readonly<IState>,
     snapshot?: any
   ) {
-    // user now signed in when they weren't before
+    // user now signed in when thgey weren't before
     if (this.props.data!.user && !prevProps.data!.user) {
       // redirect to dashboard
       this.props.history.push("/dashboard");
@@ -35,7 +34,7 @@ class LoginForm extends React.Component<IProps, IState> {
   public render() {
     return (
       <div>
-        <h3>Login</h3>
+        <h3>Sign Up</h3>
         <AuthForm onSubmit={this.onSubmit} errors={this.state.errors} />
       </div>
     );
@@ -68,4 +67,4 @@ class LoginForm extends React.Component<IProps, IState> {
   };
 }
 
-export default withLoginMutation()(withGetUserQuery()(withRouter(LoginForm)));
+export default withSignupMutation()(withGetUserQuery()(withRouter(SignupForm)));

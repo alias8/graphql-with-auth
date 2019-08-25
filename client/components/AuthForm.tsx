@@ -1,7 +1,9 @@
 import React, { FormEvent } from "react";
+import styles from "../styles/styles.scss";
 
 interface IProps {
   onSubmit: (email: string, password: string) => void;
+  errors: string[];
 }
 
 interface IState {
@@ -39,7 +41,11 @@ class AuthForm extends React.Component<IProps, IState> {
               onChange={e => this.setState({ password: e.target.value })}
             />
           </div>
-
+          <div className={styles.errors}>
+            {this.props.errors.map(error => {
+              return <div key={error}>{error}</div>;
+            })}
+          </div>
           <button className={"btn"}>Submit</button>
         </form>
       </div>
