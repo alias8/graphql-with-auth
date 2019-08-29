@@ -12,6 +12,7 @@ import webpackMiddleware from "webpack-dev-middleware";
 import { webpackConfig } from "../webpack.config";
 import { IUserModel, User } from "./models/user";
 import schema from "./schema/schema";
+import path from "path";
 
 export interface IController {
   // path: string;
@@ -26,6 +27,8 @@ export class App {
     this.app = express();
 
     this.app.set("port", 4000);
+
+    this.app.use(express.static(path.join(__dirname, 'index.html')));
     this.connectToTheDatabase();
     this.initializeLogins();
     this.setupMiddleware();
@@ -38,6 +41,7 @@ export class App {
         `Express running → PORT ${(server.address() as AddressInfo).port}`
       );
     });
+    console.log(`trying to serve: ${path.join(__dirname, 'index.html')}`);
   }
 
   private initializeLogins() {
@@ -99,11 +103,11 @@ export class App {
     // Webpack runs as a middleware.  If any request comes in for the root route ('/')
     // Webpack will respond with the output of the webpack process: an HTML file and
     // a single bundle.js output of all of our client side Javascript
-    this.app.use(
-      webpackMiddleware(webpack(webpackConfig), {
-        publicPath: webpackConfig.output!.publicPath as string
-      })
-    );
+    // this.app.use(
+    //   webpackMiddleware(webpack(webpackConfig), {
+    //     publicPath: webpackConfig.output!.publicPath as string
+    //   })
+    // );
   }
 
   private setupPassport() {
