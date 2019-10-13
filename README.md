@@ -1,4 +1,5 @@
-Skeleton application showing how graphql can work with authentication.
+Skeleton application showing how graphql can work with authentication. 
+Deployed at https://graphql-auth196196.herokuapp.com/
 
 To run:
 1. Generate the react-apollo component wrappers with `npm run generate`

@@ -14,8 +14,7 @@
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
     "prettier-lint-all": "prettier --write  \"{server,client}/**/*.{js,jsx,ts,tsx}\" \"*.{js, ts}\" && npm run lint:fix",
-    "generate": "graphql-codegen --config codegen.yml",
-    "heroku-postbuild": "npm run build"
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "author": "",
   "license": "ISC",
