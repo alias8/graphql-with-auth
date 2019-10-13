@@ -8,13 +8,14 @@
   },
   "main": "index.ts",
   "scripts": {
-    "build": "ts-node-dev webpack.config.ts --development=true",
-    "serve": "nodemon ./dist/server.bundle.js",
-    "dev": "ts-node-dev ./server/server.ts --ignore client NODE_ENV=development",
+    "build": "ENV=prod ts-node webpack.config.ts",
+    "serve": "ENV=prod node ./dist/server.bundle.js",
+    "dev": "ENV=dev ts-node webpack.config.ts",
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "npm run lint -- --fix",
     "prettier-lint-all": "prettier --write  \"{server,client}/**/*.{js,jsx,ts,tsx}\" \"*.{js, ts}\" && npm run lint:fix",
-    "generate": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config codegen.yml",
+    "heroku-postbuild": "npm run build"
   },
   "author": "",
   "license": "ISC",
@@ -80,6 +81,7 @@
     "sass-loader": "^7.3.1",
     "style-loader": "^0.23.1",
     "ts-loader": "^6.0.2",
+    "ts-node": "^8.4.1",
     "ts-node-dev": "^1.0.0-pre.40",
     "tslint": "^5.17.0",
     "tslint-config-prettier": "^1.18.0",

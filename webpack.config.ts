@@ -3,24 +3,24 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import path from "path";
 import webpack, {Stats} from "webpack";
 import nodeExternals from "webpack-node-externals";
-import yargs from 'yargs';
 
-const argv = yargs.options({
-    development: {type: 'boolean', default: true, demandOption: true},
-    server: {type: 'boolean', default: true, demandOption: true},
-}).argv;
+if (!["dev", "test", "prod"].some(env => process.env.ENV!.toString() === env)) {
+    throw new Error(
+        "Environment must be set in the npm script eg. ENV=dev, ENV=test, ENV=prod"
+    );
+}
 
-const isDevelopment: boolean = argv.development;
+const isDevelopment: boolean = process.env.ENV !== "prod";
 
 const webpackConfigBase = (): webpack.Configuration => {
     return {
-        output: {
-            filename: "[name].bundle.js",
-            path: path.resolve(__dirname, "dist"),
-            publicPath: "/"
-        },
         mode: isDevelopment ? "development" : "production",
+        watch: isDevelopment,
         devtool: isDevelopment ? "inline-source-map" : false,
+        optimization: {
+            // We no not want to minimize our code.
+            minimize: false
+        },
         module: {
             rules: [
                 {
@@ -67,6 +67,10 @@ const webpackConfigBase = (): webpack.Configuration => {
 const webpackConfigServer = (): webpack.Configuration => {
     return {
         ...webpackConfigBase(),
+        output: {
+            filename: "[name].bundle.js",
+            path: path.resolve(__dirname, "dist"),
+        },
         entry: {
             server: "./server/server.ts"
         },
@@ -80,9 +84,13 @@ const webpackConfigServer = (): webpack.Configuration => {
     }
 };
 
-const webpackConfigClient = (): webpack.Configuration => {
+export const webpackConfigClient = (): webpack.Configuration => {
   return {
     ...webpackConfigBase(),
+      output: {
+          filename: "[name].bundle.js",
+          path: path.resolve(__dirname, "dist", "public"),
+      },
     entry: {
       client: "./client/index.tsx"
     },
@@ -102,23 +110,23 @@ const webpackConfigClient = (): webpack.Configuration => {
 };
 
 webpack([webpackConfigServer(), webpackConfigClient()], (err: Error, stats: Stats) => {
-    // if (err) {
-    //   console.error(err.stack || err);
-    //   if ((err as any).details) {
-    //     console.error((err as any).details);
-    //   }
-    //   return;
-    // }
-    //
-    // const info = stats.toJson();
-    //
-    // if (stats.hasErrors()) {
-    //   console.error(info.errors);
-    // }
-    //
-    // if (stats.hasWarnings()) {
-    //   console.warn(info.warnings);
-    // }
+    if (err) {
+      console.error(err.stack || err);
+      if ((err as any).details) {
+        console.error((err as any).details);
+      }
+      return;
+    }
+
+    const info = stats.toJson();
+
+    if (stats.hasErrors()) {
+      console.error(info.errors);
+    }
+
+    if (stats.hasWarnings()) {
+      console.warn(info.warnings);
+    }
 
     // // Log result...
 });

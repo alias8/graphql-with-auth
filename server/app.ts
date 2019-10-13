@@ -7,12 +7,9 @@ import mongoose from "mongoose";
 import { AddressInfo } from "net";
 import passport from "passport";
 import { Strategy } from "passport-local";
-import webpack from "webpack";
-import webpackMiddleware from "webpack-dev-middleware";
-import { webpackConfig } from "../webpack.config";
+import path from "path";
 import { IUserModel, User } from "./models/user";
 import schema from "./schema/schema";
-import path from "path";
 
 export interface IController {
   // path: string;
@@ -28,7 +25,7 @@ export class App {
 
     this.app.set("port", 4000);
 
-    this.app.use(express.static(path.join(__dirname, 'index.html')));
+    this.app.use(express.static(__dirname + '/public'));
     this.connectToTheDatabase();
     this.initializeLogins();
     this.setupMiddleware();
@@ -92,22 +89,18 @@ export class App {
 
     // Instruct Express to pass on any request made to the '/graphql' route
     // to the GraphQL instance.
-    this.app.use(
-      "/graphql",
-      expressGraphQL({
-        schema,
-        graphiql: true
-      })
-    );
+
 
     // Webpack runs as a middleware.  If any request comes in for the root route ('/')
     // Webpack will respond with the output of the webpack process: an HTML file and
     // a single bundle.js output of all of our client side Javascript
-    // this.app.use(
-    //   webpackMiddleware(webpack(webpackConfig), {
-    //     publicPath: webpackConfig.output!.publicPath as string
-    //   })
-    // );
+    this.app.use(
+        "/graphql",
+        expressGraphQL({
+          schema,
+          graphiql: true
+        })
+    );
   }
 
   private setupPassport() {

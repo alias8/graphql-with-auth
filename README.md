@@ -1,6 +1,5 @@
-# auth-graphql-starter
-Starter project from a GraphQL course on Udemy.com - Section 3!
+Skeleton application showing how graphql can work with authentication.
 
-todo: get server and client working, then deploy to heroku 
-https://medium.com/@binyamin/creating-a-node-express-webpack-app-with-dev-and-prod-builds-a4962ce51334
-
+To run:
+1. Generate the react-apollo component wrappers with `npm run generate`
+2. Then `npm run dev` then `npm run serve`
