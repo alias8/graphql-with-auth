@@ -23,7 +23,8 @@ export class App {
   constructor() {
     this.app = express();
 
-    this.app.set("port", 4000);
+    // process.env.PORT lets the port be set by Heroku
+    this.app.set("port", process.env.PORT || 4000);
 
     this.app.use(express.static(__dirname + '/public'));
     this.connectToTheDatabase();
@@ -38,7 +39,6 @@ export class App {
         `Express running → PORT ${(server.address() as AddressInfo).port}`
       );
     });
-    console.log(`trying to serve: ${path.join(__dirname, 'index.html')}`);
   }
 
   private initializeLogins() {
